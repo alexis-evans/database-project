@@ -23,8 +23,8 @@ SELECT * FROM scores ORDER BY score_id;
 
 -- Task 4: compute the average/highest/lowest score of an assignment
 SELECT
-    a.assignment_id,
     a.assignment_name,
+    a.assignment_id,
     ROUND(AVG(s.score), 2) AS average_score,
     MAX(s.score) AS highest_score,
     MIN(s.score) AS lowest_score
@@ -38,9 +38,9 @@ GROUP BY a.assignment_id, a.assignment_name;
 SELECT
     c.course_id,
     c.course_name,
-    s.student_id,
     s.first_name,
     s.last_name,
+    s.student_id,
     s.email
 FROM courses AS c
 JOIN enrollments AS e
@@ -56,12 +56,12 @@ ORDER BY s.last_name, s.first_name;
 SELECT
     c.course_id,
     c.course_name,
-    s.student_id,
     s.first_name,
     s.last_name,
-    a.assignment_id,
-    a.assignment_name,
+    s.student_id,
     cat.category_name,
+    a.assignment_name,
+    a.assignment_id,
     sc.score
 FROM courses AS c
 JOIN enrollments AS e
