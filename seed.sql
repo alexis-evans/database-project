@@ -1,5 +1,12 @@
 USE gradebook_project;
 
+-- Three courses across two departments to show the schema works for multiple
+-- professors / subjects, not just a single course.
+INSERT INTO courses (course_id, department, course_number, course_name, semester, year) VALUES
+(1, 'CS', '101', 'Introduction to Databases', 'Fall', 2025),
+(2, 'CS', '240', 'Data Structures', 'Spring', 2026),
+(3, 'MATH', '201', 'Discrete Mathematics', 'Fall', 2025);
+
 -- Quinn (student 3) and Qureshi (student 6) are intentional: their last names
 -- contain 'Q' so Task 10 (selective +2 for Q-last-name students) has visible targets.
 INSERT INTO students (student_id, first_name, last_name, email) VALUES
@@ -13,13 +20,6 @@ INSERT INTO students (student_id, first_name, last_name, email) VALUES
 (8, 'Henry', 'Hall', 'henry.hall@example.edu'),
 (9, 'Iris', 'Iverson', 'iris.iverson@example.edu'),
 (10, 'Jason', 'Jones', 'jason.jones@example.edu');
-
--- Three courses across two departments to show the schema works for multiple
--- professors / subjects, not just a single course.
-INSERT INTO courses (course_id, department, course_number, course_name, semester, year) VALUES
-(1, 'CS', '101', 'Introduction to Databases', 'Fall', 2025),
-(2, 'CS', '240', 'Data Structures', 'Spring', 2026),
-(3, 'MATH', '201', 'Discrete Mathematics', 'Fall', 2025);
 
 -- Students 1-7 are in course 1 (the primary demo course).
 -- Students 8-10 are in course 2 only.

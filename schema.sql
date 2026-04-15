@@ -58,10 +58,10 @@ CREATE TABLE categories (
     weight_percentage DECIMAL(5,2) NOT NULL,
     CONSTRAINT fk_category_course
         FOREIGN KEY (course_id) REFERENCES courses(course_id),
-    CONSTRAINT uq_course_category_name UNIQUE KEY (course_id, category_name),
-    CONSTRAINT uq_course_category_id UNIQUE KEY (course_id, category_id),
     CONSTRAINT chk_category_weight
-        CHECK (weight_percentage >= 0 AND weight_percentage <= 100)
+        CHECK (weight_percentage >= 0 AND weight_percentage <= 100),
+    CONSTRAINT uq_course_category_name UNIQUE KEY (course_id, category_name),
+    CONSTRAINT uq_course_category_id UNIQUE KEY (course_id, category_id)
 );
 
 -- course_id is stored here (not just derived from category) for two reasons:
@@ -102,15 +102,15 @@ CREATE TABLE scores (
     student_id INT NOT NULL,
     course_id INT NOT NULL,
     score DECIMAL(7,2) NOT NULL,
-    CONSTRAINT fk_score_assignment_course
-        FOREIGN KEY (assignment_id, course_id)
-        REFERENCES assignments(assignment_id, course_id),
     CONSTRAINT fk_score_enrollment
         FOREIGN KEY (student_id, course_id)
         REFERENCES enrollments(student_id, course_id),
-    CONSTRAINT uq_student_assignment UNIQUE KEY (student_id, assignment_id),
+    CONSTRAINT fk_score_assignment_course
+        FOREIGN KEY (assignment_id, course_id)
+        REFERENCES assignments(assignment_id, course_id),
     CONSTRAINT chk_score_nonnegative
-        CHECK (score >= 0)
+        CHECK (score >= 0),
+    CONSTRAINT uq_student_assignment UNIQUE KEY (student_id, assignment_id)
 );
 
 DELIMITER $$
