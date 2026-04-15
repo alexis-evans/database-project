@@ -1,3 +1,8 @@
+-- queries.sql
+-- Contains the SQL commands for Tasks 3-12 of the grade book project.
+-- All queries are parameterized via the SET variables below, so changing
+-- a single value re-targets the entire file without editing individual queries.
+
 USE gradebook_project;
 
 -- Change these three variables to run any task against a different course,
@@ -69,7 +74,7 @@ JOIN categories AS cat
     ON cat.category_id = a.category_id
 LEFT JOIN scores AS sc
     ON sc.assignment_id = a.assignment_id
-   AND sc.student_id = s.student_id
+    AND sc.student_id = s.student_id
 WHERE c.course_id = @course_id
 ORDER BY s.last_name, s.first_name, a.assignment_id;
 
