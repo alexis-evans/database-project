@@ -1,5 +1,7 @@
 # Grade Book Project
 
+Alexis Evans and Erica Okeh
+
 This project implements a MySQL grade book for multiple courses. It includes the full schema, sample data, SQL commands for tasks 3 through 12, a Python demo runner, an ER diagram, and written test cases with expected results.
 
 The submission is designed to satisfy the assignment requirements and to enforce the key business rules from the problem statement:
