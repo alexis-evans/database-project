@@ -1,0 +1,373 @@
+Rebuilding database from schema.sql and seed.sql ...
+
+Using parameters:
+  course_id = 1
+  student_id = 3
+  assignment_id = 9
+  new_assignment_course_id = 1
+  new_assignment_category_id = 2
+
+=== Task 3: Students table contents ===
+student_id | first_name | last_name | email                     
+-----------+------------+-----------+---------------------------
+1          | Alice      | Anderson  | alice.anderson@example.edu
+2          | Brian      | Brown     | brian.brown@example.edu   
+3          | Carla      | Quinn     | carla.quinn@example.edu   
+4          | David      | Diaz      | david.diaz@example.edu    
+5          | Evelyn     | Edwards   | evelyn.edwards@example.edu
+6          | Farah      | Qureshi   | farah.qureshi@example.edu 
+7          | Grace      | Green     | grace.green@example.edu   
+8          | Henry      | Hall      | henry.hall@example.edu    
+9          | Iris       | Iverson   | iris.iverson@example.edu  
+10         | Jason      | Jones     | jason.jones@example.edu   
+
+
+=== Task 3: Courses table contents ===
+course_id | department | course_number | course_name               | semester | year
+----------+------------+---------------+---------------------------+----------+-----
+1         | CS         | 101           | Introduction to Databases | Fall     | 2025
+2         | CS         | 240           | Data Structures           | Spring   | 2026
+3         | MATH       | 201           | Discrete Mathematics      | Fall     | 2025
+
+
+=== Task 3: Enrollments table contents ===
+enrollment_id | student_id | course_id
+--------------+------------+----------
+1             | 1          | 1        
+2             | 2          | 1        
+3             | 3          | 1        
+4             | 4          | 1        
+5             | 5          | 1        
+6             | 6          | 1        
+7             | 7          | 1        
+8             | 8          | 2        
+9             | 9          | 2        
+10            | 10         | 2        
+11            | 1          | 3        
+12            | 3          | 3        
+13            | 5          | 3        
+14            | 7          | 3        
+
+
+=== Task 3: Categories table contents ===
+category_id | course_id | category_name | weight_percentage
+------------+-----------+---------------+------------------
+1           | 1         | Participation | 10.00            
+2           | 1         | Homework      | 20.00            
+3           | 1         | Tests         | 50.00            
+4           | 1         | Projects      | 20.00            
+5           | 2         | Homework      | 30.00            
+6           | 2         | Tests         | 40.00            
+7           | 2         | Projects      | 30.00            
+8           | 3         | Homework      | 35.00            
+9           | 3         | Quizzes       | 25.00            
+10          | 3         | Exams         | 40.00            
+
+
+=== Task 3: Assignments table contents ===
+assignment_id | course_id | category_id | assignment_name      | max_points | due_date  
+--------------+-----------+-------------+----------------------+------------+-----------
+1             | 1         | 1           | Participation Week 1 | 100.00     | 2025-09-05
+2             | 1         | 1           | Participation Week 2 | 100.00     | 2025-09-12
+3             | 1         | 2           | Homework 1           | 100.00     | 2025-09-15
+4             | 1         | 2           | Homework 2           | 100.00     | 2025-09-22
+5             | 1         | 2           | Homework 3           | 100.00     | 2025-09-29
+6             | 1         | 3           | Test 1               | 100.00     | 2025-10-10
+7             | 1         | 3           | Test 2               | 100.00     | 2025-11-07
+8             | 1         | 4           | Project 1            | 100.00     | 2025-10-25
+9             | 1         | 4           | Project 2            | 100.00     | 2025-11-20
+10            | 2         | 5           | DS Homework 1        | 100.00     | 2026-02-10
+11            | 2         | 6           | DS Test 1            | 100.00     | 2026-03-01
+12            | 2         | 7           | DS Project           | 100.00     | 2026-04-10
+13            | 3         | 8           | DM Homework 1        | 100.00     | 2025-09-18
+14            | 3         | 9           | DM Quiz 1            | 100.00     | 2025-09-25
+15            | 3         | 10          | DM Midterm           | 100.00     | 2025-10-30
+
+
+=== Task 3: Scores table contents ===
+score_id | assignment_id | student_id | course_id | score 
+---------+---------------+------------+-----------+-------
+1        | 1             | 1          | 1         | 95.00 
+2        | 1             | 2          | 1         | 88.00 
+3        | 1             | 3          | 1         | 100.00
+4        | 1             | 4          | 1         | 84.00 
+5        | 1             | 5          | 1         | 92.00 
+6        | 1             | 6          | 1         | 97.00 
+7        | 1             | 7          | 1         | 89.00 
+8        | 2             | 1          | 1         | 96.00 
+9        | 2             | 2          | 1         | 90.00 
+10       | 2             | 3          | 1         | 98.00 
+11       | 2             | 4          | 1         | 86.00 
+12       | 2             | 5          | 1         | 94.00 
+13       | 2             | 6          | 1         | 99.00 
+14       | 2             | 7          | 1         | 91.00 
+15       | 3             | 1          | 1         | 87.00 
+16       | 3             | 2          | 1         | 76.00 
+17       | 3             | 3          | 1         | 94.00 
+18       | 3             | 4          | 1         | 83.00 
+19       | 3             | 5          | 1         | 90.00 
+20       | 3             | 6          | 1         | 88.00 
+21       | 3             | 7          | 1         | 79.00 
+22       | 4             | 1          | 1         | 93.00 
+23       | 4             | 2          | 1         | 81.00 
+24       | 4             | 3          | 1         | 97.00 
+25       | 4             | 4          | 1         | 78.00 
+26       | 4             | 5          | 1         | 88.00 
+27       | 4             | 6          | 1         | 92.00 
+28       | 4             | 7          | 1         | 85.00 
+29       | 5             | 1          | 1         | 84.00 
+30       | 5             | 2          | 1         | 74.00 
+31       | 5             | 3          | 1         | 96.00 
+32       | 5             | 4          | 1         | 82.00 
+33       | 5             | 5          | 1         | 87.00 
+34       | 5             | 6          | 1         | 91.00 
+35       | 5             | 7          | 1         | 80.00 
+36       | 6             | 1          | 1         | 91.00 
+37       | 6             | 2          | 1         | 68.00 
+38       | 6             | 3          | 1         | 98.00 
+39       | 6             | 4          | 1         | 85.00 
+40       | 6             | 5          | 1         | 93.00 
+41       | 6             | 6          | 1         | 89.00 
+42       | 6             | 7          | 1         | 77.00 
+43       | 7             | 1          | 1         | 89.00 
+44       | 7             | 2          | 1         | 72.00 
+45       | 7             | 3          | 1         | 95.00 
+46       | 7             | 4          | 1         | 80.00 
+47       | 7             | 5          | 1         | 90.00 
+48       | 7             | 6          | 1         | 86.00 
+49       | 7             | 7          | 1         | 75.00 
+50       | 8             | 1          | 1         | 94.00 
+51       | 8             | 2          | 1         | 82.00 
+52       | 8             | 3          | 1         | 99.00 
+53       | 8             | 4          | 1         | 88.00 
+54       | 8             | 5          | 1         | 91.00 
+55       | 8             | 6          | 1         | 93.00 
+56       | 8             | 7          | 1         | 84.00 
+57       | 9             | 1          | 1         | 97.00 
+58       | 9             | 2          | 1         | 85.00 
+59       | 9             | 3          | 1         | 100.00
+60       | 9             | 4          | 1         | 87.00 
+61       | 9             | 5          | 1         | 94.00 
+62       | 9             | 6          | 1         | 98.00 
+63       | 9             | 7          | 1         | 86.00 
+64       | 10            | 8          | 2         | 88.00 
+65       | 10            | 9          | 2         | 91.00 
+66       | 10            | 10         | 2         | 84.00 
+67       | 11            | 8          | 2         | 79.00 
+68       | 11            | 9          | 2         | 93.00 
+69       | 11            | 10         | 2         | 81.00 
+70       | 12            | 8          | 2         | 90.00 
+71       | 12            | 9          | 2         | 95.00 
+72       | 12            | 10         | 2         | 87.00 
+73       | 13            | 1          | 3         | 92.00 
+74       | 13            | 3          | 3         | 96.00 
+75       | 13            | 5          | 3         | 89.00 
+76       | 13            | 7          | 3         | 85.00 
+77       | 14            | 1          | 3         | 88.00 
+78       | 14            | 3          | 3         | 94.00 
+79       | 14            | 5          | 3         | 91.00 
+80       | 14            | 7          | 3         | 83.00 
+81       | 15            | 1          | 3         | 90.00 
+82       | 15            | 3          | 3         | 97.00 
+83       | 15            | 5          | 3         | 93.00 
+84       | 15            | 7          | 3         | 86.00 
+
+
+=== Task 4: Average, highest, and lowest score of an assignment ===
+assignment_id | assignment_name | average_score | highest_score | lowest_score
+--------------+-----------------+---------------+---------------+-------------
+9             | Project 2       | 92.43         | 100.00        | 85.00       
+
+
+=== Task 5: Students in a given course ===
+course_id | course_name               | student_id | first_name | last_name | email                     
+----------+---------------------------+------------+------------+-----------+---------------------------
+1         | Introduction to Databases | 1          | Alice      | Anderson  | alice.anderson@example.edu
+1         | Introduction to Databases | 2          | Brian      | Brown     | brian.brown@example.edu   
+1         | Introduction to Databases | 4          | David      | Diaz      | david.diaz@example.edu    
+1         | Introduction to Databases | 5          | Evelyn     | Edwards   | evelyn.edwards@example.edu
+1         | Introduction to Databases | 7          | Grace      | Green     | grace.green@example.edu   
+1         | Introduction to Databases | 3          | Carla      | Quinn     | carla.quinn@example.edu   
+1         | Introduction to Databases | 6          | Farah      | Qureshi   | farah.qureshi@example.edu 
+
+
+=== Task 6: Students in a course with all assignment scores ===
+course_id | course_name               | student_id | first_name | last_name | assignment_id | assignment_name      | category_name | score 
+----------+---------------------------+------------+------------+-----------+---------------+----------------------+---------------+-------
+1         | Introduction to Databases | 1          | Alice      | Anderson  | 1             | Participation Week 1 | Participation | 95.00 
+1         | Introduction to Databases | 1          | Alice      | Anderson  | 2             | Participation Week 2 | Participation | 96.00 
+1         | Introduction to Databases | 1          | Alice      | Anderson  | 3             | Homework 1           | Homework      | 87.00 
+1         | Introduction to Databases | 1          | Alice      | Anderson  | 4             | Homework 2           | Homework      | 93.00 
+1         | Introduction to Databases | 1          | Alice      | Anderson  | 5             | Homework 3           | Homework      | 84.00 
+1         | Introduction to Databases | 1          | Alice      | Anderson  | 6             | Test 1               | Tests         | 91.00 
+1         | Introduction to Databases | 1          | Alice      | Anderson  | 7             | Test 2               | Tests         | 89.00 
+1         | Introduction to Databases | 1          | Alice      | Anderson  | 8             | Project 1            | Projects      | 94.00 
+1         | Introduction to Databases | 1          | Alice      | Anderson  | 9             | Project 2            | Projects      | 97.00 
+1         | Introduction to Databases | 2          | Brian      | Brown     | 1             | Participation Week 1 | Participation | 88.00 
+1         | Introduction to Databases | 2          | Brian      | Brown     | 2             | Participation Week 2 | Participation | 90.00 
+1         | Introduction to Databases | 2          | Brian      | Brown     | 3             | Homework 1           | Homework      | 76.00 
+1         | Introduction to Databases | 2          | Brian      | Brown     | 4             | Homework 2           | Homework      | 81.00 
+1         | Introduction to Databases | 2          | Brian      | Brown     | 5             | Homework 3           | Homework      | 74.00 
+1         | Introduction to Databases | 2          | Brian      | Brown     | 6             | Test 1               | Tests         | 68.00 
+1         | Introduction to Databases | 2          | Brian      | Brown     | 7             | Test 2               | Tests         | 72.00 
+1         | Introduction to Databases | 2          | Brian      | Brown     | 8             | Project 1            | Projects      | 82.00 
+1         | Introduction to Databases | 2          | Brian      | Brown     | 9             | Project 2            | Projects      | 85.00 
+1         | Introduction to Databases | 4          | David      | Diaz      | 1             | Participation Week 1 | Participation | 84.00 
+1         | Introduction to Databases | 4          | David      | Diaz      | 2             | Participation Week 2 | Participation | 86.00 
+1         | Introduction to Databases | 4          | David      | Diaz      | 3             | Homework 1           | Homework      | 83.00 
+1         | Introduction to Databases | 4          | David      | Diaz      | 4             | Homework 2           | Homework      | 78.00 
+1         | Introduction to Databases | 4          | David      | Diaz      | 5             | Homework 3           | Homework      | 82.00 
+1         | Introduction to Databases | 4          | David      | Diaz      | 6             | Test 1               | Tests         | 85.00 
+1         | Introduction to Databases | 4          | David      | Diaz      | 7             | Test 2               | Tests         | 80.00 
+1         | Introduction to Databases | 4          | David      | Diaz      | 8             | Project 1            | Projects      | 88.00 
+1         | Introduction to Databases | 4          | David      | Diaz      | 9             | Project 2            | Projects      | 87.00 
+1         | Introduction to Databases | 5          | Evelyn     | Edwards   | 1             | Participation Week 1 | Participation | 92.00 
+1         | Introduction to Databases | 5          | Evelyn     | Edwards   | 2             | Participation Week 2 | Participation | 94.00 
+1         | Introduction to Databases | 5          | Evelyn     | Edwards   | 3             | Homework 1           | Homework      | 90.00 
+1         | Introduction to Databases | 5          | Evelyn     | Edwards   | 4             | Homework 2           | Homework      | 88.00 
+1         | Introduction to Databases | 5          | Evelyn     | Edwards   | 5             | Homework 3           | Homework      | 87.00 
+1         | Introduction to Databases | 5          | Evelyn     | Edwards   | 6             | Test 1               | Tests         | 93.00 
+1         | Introduction to Databases | 5          | Evelyn     | Edwards   | 7             | Test 2               | Tests         | 90.00 
+1         | Introduction to Databases | 5          | Evelyn     | Edwards   | 8             | Project 1            | Projects      | 91.00 
+1         | Introduction to Databases | 5          | Evelyn     | Edwards   | 9             | Project 2            | Projects      | 94.00 
+1         | Introduction to Databases | 7          | Grace      | Green     | 1             | Participation Week 1 | Participation | 89.00 
+1         | Introduction to Databases | 7          | Grace      | Green     | 2             | Participation Week 2 | Participation | 91.00 
+1         | Introduction to Databases | 7          | Grace      | Green     | 3             | Homework 1           | Homework      | 79.00 
+1         | Introduction to Databases | 7          | Grace      | Green     | 4             | Homework 2           | Homework      | 85.00 
+1         | Introduction to Databases | 7          | Grace      | Green     | 5             | Homework 3           | Homework      | 80.00 
+1         | Introduction to Databases | 7          | Grace      | Green     | 6             | Test 1               | Tests         | 77.00 
+1         | Introduction to Databases | 7          | Grace      | Green     | 7             | Test 2               | Tests         | 75.00 
+1         | Introduction to Databases | 7          | Grace      | Green     | 8             | Project 1            | Projects      | 84.00 
+1         | Introduction to Databases | 7          | Grace      | Green     | 9             | Project 2            | Projects      | 86.00 
+1         | Introduction to Databases | 3          | Carla      | Quinn     | 1             | Participation Week 1 | Participation | 100.00
+1         | Introduction to Databases | 3          | Carla      | Quinn     | 2             | Participation Week 2 | Participation | 98.00 
+1         | Introduction to Databases | 3          | Carla      | Quinn     | 3             | Homework 1           | Homework      | 94.00 
+1         | Introduction to Databases | 3          | Carla      | Quinn     | 4             | Homework 2           | Homework      | 97.00 
+1         | Introduction to Databases | 3          | Carla      | Quinn     | 5             | Homework 3           | Homework      | 96.00 
+1         | Introduction to Databases | 3          | Carla      | Quinn     | 6             | Test 1               | Tests         | 98.00 
+1         | Introduction to Databases | 3          | Carla      | Quinn     | 7             | Test 2               | Tests         | 95.00 
+1         | Introduction to Databases | 3          | Carla      | Quinn     | 8             | Project 1            | Projects      | 99.00 
+1         | Introduction to Databases | 3          | Carla      | Quinn     | 9             | Project 2            | Projects      | 100.00
+1         | Introduction to Databases | 6          | Farah      | Qureshi   | 1             | Participation Week 1 | Participation | 97.00 
+1         | Introduction to Databases | 6          | Farah      | Qureshi   | 2             | Participation Week 2 | Participation | 99.00 
+1         | Introduction to Databases | 6          | Farah      | Qureshi   | 3             | Homework 1           | Homework      | 88.00 
+1         | Introduction to Databases | 6          | Farah      | Qureshi   | 4             | Homework 2           | Homework      | 92.00 
+1         | Introduction to Databases | 6          | Farah      | Qureshi   | 5             | Homework 3           | Homework      | 91.00 
+1         | Introduction to Databases | 6          | Farah      | Qureshi   | 6             | Test 1               | Tests         | 89.00 
+1         | Introduction to Databases | 6          | Farah      | Qureshi   | 7             | Test 2               | Tests         | 86.00 
+1         | Introduction to Databases | 6          | Farah      | Qureshi   | 8             | Project 1            | Projects      | 93.00 
+1         | Introduction to Databases | 6          | Farah      | Qureshi   | 9             | Project 2            | Projects      | 98.00 
+
+
+=== Task 7: Validate course category weights before adding an assignment ===
+Rows affected: 1
+
+
+=== Task 7: Add a new assignment ===
+Rows affected: 1
+
+
+=== Task 7: Assignments after insertion ===
+assignment_id | course_id | category_id | assignment_name      | max_points | due_date  
+--------------+-----------+-------------+----------------------+------------+-----------
+1             | 1         | 1           | Participation Week 1 | 100.00     | 2025-09-05
+2             | 1         | 1           | Participation Week 2 | 100.00     | 2025-09-12
+3             | 1         | 2           | Homework 1           | 100.00     | 2025-09-15
+4             | 1         | 2           | Homework 2           | 100.00     | 2025-09-22
+5             | 1         | 2           | Homework 3           | 100.00     | 2025-09-29
+6             | 1         | 3           | Test 1               | 100.00     | 2025-10-10
+7             | 1         | 3           | Test 2               | 100.00     | 2025-11-07
+8             | 1         | 4           | Project 1            | 100.00     | 2025-10-25
+9             | 1         | 4           | Project 2            | 100.00     | 2025-11-20
+16            | 1         | 2           | Homework 4           | 100.00     | 2025-10-06
+
+
+=== Task 8: Reset temporary category weight update table ===
+Rows affected: 0
+
+
+=== Task 8: Create temporary category weight update table ===
+Rows affected: 0
+
+
+=== Task 8: Supply new category percentages ===
+Rows affected: 4
+
+
+=== Task 8: Preview supplied category percentages ===
+rows_supplied | supplied_total_weight
+--------------+----------------------
+4             | 100.00               
+
+
+=== Task 8: Temporarily zero out existing course percentages ===
+Rows affected: 4
+
+
+=== Task 8: Change category percentages ===
+Rows affected: 4
+
+
+=== Task 8: Validate category percentages total 100 ===
+Rows affected: 1
+
+
+=== Task 8: Categories after percentage update ===
+course_id | category_name | weight_percentage
+----------+---------------+------------------
+1         | Participation | 15.00            
+1         | Homework      | 25.00            
+1         | Tests         | 40.00            
+1         | Projects      | 20.00            
+
+
+=== Task 9: Add 2 points to all students on one assignment ===
+Rows affected: 6
+
+
+=== Task 9: Scores after universal +2 update ===
+assignment_id | student_id | score 
+--------------+------------+-------
+9             | 1          | 99.00 
+9             | 2          | 87.00 
+9             | 3          | 100.00
+9             | 4          | 89.00 
+9             | 5          | 96.00 
+9             | 6          | 100.00
+9             | 7          | 88.00 
+
+
+=== Task 10: Add 2 points to students whose last name contains Q ===
+Rows affected: 0
+
+
+=== Task 10: Scores after selective +2 update ===
+assignment_id | student_id | last_name | score 
+--------------+------------+-----------+-------
+9             | 1          | Anderson  | 99.00 
+9             | 2          | Brown     | 87.00 
+9             | 3          | Quinn     | 100.00
+9             | 4          | Diaz      | 89.00 
+9             | 5          | Edwards   | 96.00 
+9             | 6          | Qureshi   | 100.00
+9             | 7          | Green     | 88.00 
+
+
+=== Task 11: Validate category percentages before grade computation ===
+Rows affected: 1
+
+
+=== Task 11: Final grade for one student ===
+student_id | first_name | last_name | final_grade
+-----------+------------+-----------+------------
+3          | Carla      | Quinn     | 97.27      
+
+
+=== Task 12: Validate category percentages before dropped-score grade computation ===
+Rows affected: 1
+
+
+=== Task 12: Final grade with lowest category score dropped ===
+student_id | first_name | last_name | final_grade_with_drop
+-----------+------------+-----------+----------------------
+3          | Carla      | Quinn     | 98.33                

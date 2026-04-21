@@ -3,8 +3,8 @@ USE gradebook_project;
 SET @course_id = 1;
 SET @student_id = 3;
 SET @assignment_id = 9;
-SET @new_assignment_course_id = 1;
-SET @new_assignment_category_id = 2;
+SET @new_assignment_course_id = 10;
+SET @new_assignment_category_id = 11;
 
 -- Task 3: show the tables with inserted values
 SELECT * FROM students ORDER BY student_id;

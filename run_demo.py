@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import os
 import sys
 from pathlib import Path
@@ -18,7 +19,7 @@ MYSQL_CONFIG = {
     "host": os.getenv("MYSQL_HOST", "127.0.0.1"),
     "port": int(os.getenv("MYSQL_PORT", "3306")),
     "user": os.getenv("MYSQL_USER", "root"),
-    "password": os.getenv("MYSQL_PASSWORD", ""),
+    "password": os.getenv("MYSQL_PASSWORD", "NewStrongPassword123!"),
     "autocommit": True,
 }
 
@@ -362,6 +363,37 @@ DEFAULT_PARAMS = {
     "new_assignment_category_id": 2,
 }
 
+TASK_GROUPS = {
+    1: [],
+    2: [],
+    3: [
+        "task3_students",
+        "task3_courses",
+        "task3_enrollments",
+        "task3_categories",
+        "task3_assignments",
+        "task3_scores",
+    ],
+    4: ["task4"],
+    5: ["task5"],
+    6: ["task6"],
+    7: ["task7_validate", "task7_insert", "task7_show"],
+    8: [
+        "task8_reset_temp",
+        "task8_create_temp",
+        "task8_seed_temp",
+        "task8_preview",
+        "task8_zero_out",
+        "task8_update",
+        "task8_validate",
+        "task8_show",
+    ],
+    9: ["task9_update", "task9_show"],
+    10: ["task10_update", "task10_show"],
+    11: ["task11_validate", "task11"],
+    12: ["task12_validate", "task12"],
+}
+
 
 def print_table(rows: list[dict]) -> None:
     if not rows:
@@ -439,7 +471,31 @@ def execute_task(cursor: MySQLCursorDict, task: dict, params: dict) -> None:
             cursor.fetchall()
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Run the grade book project demo queries."
+    )
+    parser.add_argument(
+        "task",
+        nargs="?",
+        type=int,
+        choices=sorted(TASK_GROUPS),
+        help="Task number to run (1-12). Omit to run all tasks.",
+    )
+    return parser.parse_args()
+
+
+def get_tasks_to_run(selected_task: int | None) -> list[dict]:
+    if selected_task is None:
+        return TASK_DEFINITIONS
+
+    task_ids = set(TASK_GROUPS[selected_task])
+    return [task for task in TASK_DEFINITIONS if task["id"] in task_ids]
+
+
 def main() -> int:
+    args = parse_args()
+
     try:
         connection = mysql.connector.connect(**MYSQL_CONFIG)
     except mysql.connector.Error as exc:
@@ -449,15 +505,33 @@ def main() -> int:
 
     try:
         cursor = connection.cursor(dictionary=True)
-        print("Rebuilding database from schema.sql and seed.sql ...")
-        run_sql_script(connection, SCHEMA_FILE)
-        run_sql_script(connection, SEED_FILE)
+        if args.task is None:
+            print("Rebuilding database from schema.sql and seed.sql ...")
+            run_sql_script(connection, SCHEMA_FILE)
+            run_sql_script(connection, SEED_FILE)
+        elif args.task == 1:
+            print("Running task 1: rebuilding database from schema.sql ...")
+            run_sql_script(connection, SCHEMA_FILE)
+            return 0
+        elif args.task == 2:
+            print("Running task 2: loading seed.sql ...")
+            run_sql_script(connection, SEED_FILE)
+            return 0
+        else:
+            print("Rebuilding database from schema.sql and seed.sql ...")
+            run_sql_script(connection, SCHEMA_FILE)
+            run_sql_script(connection, SEED_FILE)
 
         print("\nUsing parameters:")
         for key, value in DEFAULT_PARAMS.items():
             print(f"  {key} = {value}")
 
-        for task in TASK_DEFINITIONS:
+        if args.task is None:
+            print("\nRunning all tasks.")
+        else:
+            print(f"\nRunning task {args.task}.")
+
+        for task in get_tasks_to_run(args.task):
             execute_task(cursor, task, DEFAULT_PARAMS)
     finally:
         connection.close()
