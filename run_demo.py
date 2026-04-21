@@ -1,11 +1,17 @@
-"""Run the grade book project setup and required queries against MySQL."""
+"""Rebuild the gradebook database and run tasks 3-12 against MySQL.
+
+Execution order:
+  1. schema.sql  - drops and recreates all tables, triggers, and the procedure
+  2. seed.sql    - inserts students, courses, enrollments, categories, assignments, scores
+  3. TASK_DEFINITIONS - runs each task query in sequence and prints the results
+"""
 
 from __future__ import annotations
 
 import argparse
 import os
-import sys
 from pathlib import Path
+import sys
 
 import mysql.connector
 from mysql.connector.cursor import MySQLCursorDict
@@ -396,6 +402,7 @@ TASK_GROUPS = {
 
 
 def print_table(rows: list[dict]) -> None:
+    """Print a list of row dicts as a plain-text aligned table."""
     if not rows:
         print("No rows returned.\n")
         return
@@ -416,6 +423,12 @@ def print_table(rows: list[dict]) -> None:
 
 
 def split_sql_script(sql_text: str) -> list[str]:
+    """Split a SQL script into individual statements, respecting DELIMITER changes.
+
+    MySQL's trigger and procedure definitions use DELIMITER $$ so that semicolons
+    inside the body are not treated as statement boundaries.  This parser tracks
+    the active delimiter and strips it before adding each statement to the list.
+    """
     statements: list[str] = []
     delimiter = ";"
     buffer: list[str] = []
@@ -444,6 +457,12 @@ def split_sql_script(sql_text: str) -> list[str]:
 
 
 def run_sql_script(connection: mysql.connector.MySQLConnection, path: Path) -> None:
+    """Execute every statement in a SQL file, discarding any result sets.
+
+    Result sets must be consumed before the next execute call or the connector
+    raises an 'Unread result found' error, so fetchall() is called whenever
+    with_rows is True.
+    """
     sql_text = path.read_text(encoding="utf-8")
     cursor = connection.cursor()
     try:
@@ -456,6 +475,10 @@ def run_sql_script(connection: mysql.connector.MySQLConnection, path: Path) -> N
 
 
 def execute_task(cursor: MySQLCursorDict, task: dict, params: dict) -> None:
+    """Run one task query, print its result set or affected-row count, then
+    drain any additional result sets (e.g. from CALL statements that return
+    multiple sets) so the cursor is clean for the next task.
+    """
     label = TASK_LABELS[task["id"]]
     print(f"\n=== {label} ===")
     cursor.execute(task["sql"], params)
@@ -466,6 +489,7 @@ def execute_task(cursor: MySQLCursorDict, task: dict, params: dict) -> None:
     else:
         print(f"Rows affected: {cursor.rowcount}\n")
 
+    # Drain extra result sets produced by stored procedure calls.
     while cursor.nextset():
         if cursor.with_rows:
             cursor.fetchall()

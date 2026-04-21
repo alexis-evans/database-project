@@ -1,10 +1,17 @@
+-- queries.sql
+-- Contains the SQL commands for Tasks 3-12 of the grade book project.
+-- All queries are parameterized via the SET variables below, so changing
+-- a single value re-targets the entire file without editing individual queries.
+
 USE gradebook_project;
 
-SET @course_id = 1;
-SET @student_id = 3;
-SET @assignment_id = 9;
-SET @new_assignment_course_id = 10;
-SET @new_assignment_category_id = 11;
+-- Change these three variables to run any task against a different course,
+-- student, or assignment without modifying the queries themselves.
+SET @course_id = 1;                   -- CS 101: Introduction to Databases
+SET @student_id = 3;                  -- Carla Quinn
+SET @assignment_id = 9;               -- Project 2
+SET @new_assignment_course_id = 1;
+SET @new_assignment_category_id = 2;  -- Homework category in course 1
 
 -- Task 3: show the tables with inserted values
 SELECT * FROM students ORDER BY student_id;
@@ -16,8 +23,8 @@ SELECT * FROM scores ORDER BY score_id;
 
 -- Task 4: compute the average/highest/lowest score of an assignment
 SELECT
-    a.assignment_id,
     a.assignment_name,
+    a.assignment_id,
     ROUND(AVG(s.score), 2) AS average_score,
     MAX(s.score) AS highest_score,
     MIN(s.score) AS lowest_score
@@ -31,9 +38,9 @@ GROUP BY a.assignment_id, a.assignment_name;
 SELECT
     c.course_id,
     c.course_name,
-    s.student_id,
     s.first_name,
     s.last_name,
+    s.student_id,
     s.email
 FROM courses AS c
 JOIN enrollments AS e
@@ -44,15 +51,17 @@ WHERE c.course_id = @course_id
 ORDER BY s.last_name, s.first_name;
 
 -- Task 6: list all students in a course and all of their scores on every assignment
+-- LEFT JOIN on scores so students with no score yet appear with NULL rather than
+-- being omitted from the result.
 SELECT
     c.course_id,
     c.course_name,
-    s.student_id,
     s.first_name,
     s.last_name,
-    a.assignment_id,
-    a.assignment_name,
+    s.student_id,
     cat.category_name,
+    a.assignment_name,
+    a.assignment_id,
     sc.score
 FROM courses AS c
 JOIN enrollments AS e
@@ -65,11 +74,12 @@ JOIN categories AS cat
     ON cat.category_id = a.category_id
 LEFT JOIN scores AS sc
     ON sc.assignment_id = a.assignment_id
-   AND sc.student_id = s.student_id
+    AND sc.student_id = s.student_id
 WHERE c.course_id = @course_id
 ORDER BY s.last_name, s.first_name, a.assignment_id;
 
 -- Task 7: add an assignment to a course
+-- Validate category weights total 100 before adding the assignment.
 CALL assert_course_weights_total_100(@new_assignment_course_id);
 
 INSERT INTO assignments (course_id, category_id, assignment_name, max_points, due_date)
@@ -81,7 +91,10 @@ WHERE course_id = @new_assignment_course_id
 ORDER BY assignment_id;
 
 -- Task 8: change the percentages of the categories for a course
--- This update pattern is course-agnostic: provide the target category_id rows and new weights.
+-- A temporary table holds the desired (category_id, new_weight) pairs so the
+-- update is general and not tied to hard-coded category names.
+-- The existing weights are zeroed first so the before-update trigger does not
+-- reject intermediate states where the running total exceeds 100.
 DROP TEMPORARY TABLE IF EXISTS task8_category_weight_changes;
 
 CREATE TEMPORARY TABLE task8_category_weight_changes (
@@ -91,17 +104,20 @@ CREATE TEMPORARY TABLE task8_category_weight_changes (
         CHECK (new_weight_percentage >= 0 AND new_weight_percentage <= 100)
 );
 
+-- New distribution: 15% Participation, 25% Homework, 40% Tests, 20% Projects.
 INSERT INTO task8_category_weight_changes (category_id, new_weight_percentage) VALUES
     (1, 15.00),
     (2, 25.00),
     (3, 40.00),
     (4, 20.00);
 
+-- Preview the supplied values before applying them.
 SELECT
     COUNT(*) AS rows_supplied,
     ROUND(SUM(new_weight_percentage), 2) AS supplied_total_weight
 FROM task8_category_weight_changes;
 
+-- Zero out first so the trigger allows the subsequent per-row updates.
 UPDATE categories
 SET weight_percentage = 0
 WHERE course_id = @course_id;
@@ -112,6 +128,7 @@ JOIN task8_category_weight_changes AS t
 SET c.weight_percentage = t.new_weight_percentage
 WHERE c.course_id = @course_id;
 
+-- Confirm the course still totals exactly 100 after the update.
 CALL assert_course_weights_total_100(@course_id);
 
 SELECT
@@ -122,7 +139,8 @@ FROM categories
 WHERE course_id = @course_id
 ORDER BY category_id;
 
--- Task 9: add 2 points to the score of each student on an assignment, capped at the assignment max_points
+-- Task 9: add 2 points to the score of each student on an assignment
+-- LEAST caps at the assignment's own max_points rather than a hard-coded 100.
 UPDATE scores AS sc
 JOIN assignments AS a
     ON a.assignment_id = sc.assignment_id
@@ -137,7 +155,9 @@ FROM scores
 WHERE assignment_id = @assignment_id
 ORDER BY student_id;
 
--- Task 10: add 2 points just to those students whose last name contains a 'Q', capped at the assignment max_points
+-- Task 10: add 2 points just to those students whose last name contains a 'Q'
+-- LIKE is case-insensitive under MySQL's default utf8mb4_0900_ai_ci collation,
+-- so '%Q%' matches both 'Quinn' and 'Qureshi'.
 UPDATE scores AS sc
 JOIN students AS s
     ON s.student_id = sc.student_id
@@ -159,6 +179,9 @@ WHERE sc.assignment_id = @assignment_id
 ORDER BY sc.student_id;
 
 -- Task 11: compute the grade for a student
+-- The CTE computes each category's average as a percentage (score / max_points * 100),
+-- then the outer query weights each category average by its percentage share.
+-- Assignments with no score for this student are excluded from the average.
 CALL assert_course_weights_total_100(@course_id);
 
 WITH category_student_scores AS (
@@ -185,6 +208,10 @@ JOIN students AS st
 GROUP BY st.student_id, st.first_name, st.last_name;
 
 -- Task 12: compute the grade for a student where the lowest score in each category is dropped
+-- ROW_NUMBER ranks scores within each category by normalized score (lowest = rank 1).
+-- assignment_id breaks ties deterministically.
+-- The outer CASE keeps the score when a category has only one assignment so no
+-- student is penalized for a single-assignment category.
 CALL assert_course_weights_total_100(@course_id);
 
 WITH ranked_scores AS (
@@ -192,6 +219,7 @@ WITH ranked_scores AS (
         a.category_id,
         sc.score,
         a.max_points,
+        -- Rank 1 = lowest normalized score in this category for this student.
         ROW_NUMBER() OVER (
             PARTITION BY a.category_id
             ORDER BY (sc.score / a.max_points), a.assignment_id
@@ -207,7 +235,9 @@ category_student_scores AS (
     SELECT
         rs.category_id,
         CASE
+            -- If the category has only one assignment, keep it (nothing to drop).
             WHEN MAX(rs.assignment_count) = 1 THEN AVG((rs.score / rs.max_points) * 100)
+            -- Otherwise exclude rank-1 (the lowest) from the average.
             ELSE AVG(
                 CASE
                     WHEN rs.score_rank = 1 THEN NULL

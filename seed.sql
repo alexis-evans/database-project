@@ -1,5 +1,14 @@
 USE gradebook_project;
 
+-- Three courses across two departments to show the schema works for multiple
+-- professors / subjects, not just a single course.
+INSERT INTO courses (course_id, department, course_number, course_name, semester, year) VALUES
+(1, 'CS', '101', 'Introduction to Databases', 'Fall', 2025),
+(2, 'CS', '240', 'Data Structures', 'Spring', 2026),
+(3, 'MATH', '201', 'Discrete Mathematics', 'Fall', 2025);
+
+-- Quinn (student 3) and Qureshi (student 6) are intentional: their last names
+-- contain 'Q' so Task 10 (selective +2 for Q-last-name students) has visible targets.
 INSERT INTO students (student_id, first_name, last_name, email) VALUES
 (1, 'Alice', 'Anderson', 'alice.anderson@example.edu'),
 (2, 'Brian', 'Brown', 'brian.brown@example.edu'),
@@ -12,11 +21,9 @@ INSERT INTO students (student_id, first_name, last_name, email) VALUES
 (9, 'Iris', 'Iverson', 'iris.iverson@example.edu'),
 (10, 'Jason', 'Jones', 'jason.jones@example.edu');
 
-INSERT INTO courses (course_id, department, course_number, course_name, semester, year) VALUES
-(1, 'CS', '101', 'Introduction to Databases', 'Fall', 2025),
-(2, 'CS', '240', 'Data Structures', 'Spring', 2026),
-(3, 'MATH', '201', 'Discrete Mathematics', 'Fall', 2025);
-
+-- Students 1-7 are in course 1 (the primary demo course).
+-- Students 8-10 are in course 2 only.
+-- Students 1, 3, 5, 7 are also in course 3, showing students can span courses.
 INSERT INTO enrollments (enrollment_id, student_id, course_id) VALUES
 (1, 1, 1),
 (2, 2, 1),
@@ -33,6 +40,10 @@ INSERT INTO enrollments (enrollment_id, student_id, course_id) VALUES
 (13, 5, 3),
 (14, 7, 3);
 
+-- Course 1 uses the distribution from the problem statement example:
+--   10% Participation, 20% Homework, 50% Tests, 20% Projects.
+-- Course 2 and Course 3 use different distributions to demonstrate the schema
+-- handles per-course category configurations independently.
 INSERT INTO categories (category_id, course_id, category_name, weight_percentage) VALUES
 (1, 1, 'Participation', 10.00),
 (2, 1, 'Homework', 20.00),
@@ -45,10 +56,15 @@ INSERT INTO categories (category_id, course_id, category_name, weight_percentage
 (9, 3, 'Quizzes', 25.00),
 (10, 3, 'Exams', 40.00);
 
+-- Confirm all three courses total exactly 100% before inserting assignments.
+-- The triggers only block exceeding 100; this procedure enforces the exact-100 rule.
 CALL assert_course_weights_total_100(1);
 CALL assert_course_weights_total_100(2);
 CALL assert_course_weights_total_100(3);
 
+-- Course 1 has 9 assignments across 4 categories (multiple per category).
+-- This exercises the per-assignment weight calculation: e.g. 3 homework
+-- assignments each count for 20%/3 of the final grade.
 INSERT INTO assignments (assignment_id, course_id, category_id, assignment_name, max_points, due_date) VALUES
 (1, 1, 1, 'Participation Week 1', 100.00, '2025-09-05'),
 (2, 1, 1, 'Participation Week 2', 100.00, '2025-09-12'),
@@ -66,6 +82,8 @@ INSERT INTO assignments (assignment_id, course_id, category_id, assignment_name,
 (14, 3, 9, 'DM Quiz 1', 100.00, '2025-09-25'),
 (15, 3, 10, 'DM Midterm', 100.00, '2025-10-30');
 
+-- scores.course_id must match both the assignment's course and the enrollment's
+-- course; these values are set explicitly to satisfy those composite foreign keys.
 INSERT INTO scores (score_id, assignment_id, student_id, course_id, score) VALUES
 (1, 1, 1, 1, 95.00),
 (2, 1, 2, 1, 88.00),
